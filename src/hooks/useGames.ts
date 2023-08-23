@@ -1,8 +1,9 @@
-import { useQuery } from "react-query";
+import { useInfiniteQuery } from "react-query";
 import { GameQuery } from "../App";
 import { FetchResponse, Platform } from "../services/api-client";
-import apiClient from "../services/api-client";
-import { APICLIENT } from "../services/APICLIENTS";
+import { apiClient } from "../services/api-client";
+
+const apiClientInstance = new apiClient<Game>("/games");
 
 export interface Game {
   id: number;
@@ -13,9 +14,23 @@ export interface Game {
   rating_top: number;
 }
 
-const useGames = (gameQuery: GameQuery) => {
-  const genericAPICLIENT = new APICLIENT("/games", "games", gameQuery);
-  return genericAPICLIENT.getAll<Game>(); 
+const useGames = (gameQuery: GameQuery, pageSize: number) => {
+  return useInfiniteQuery<FetchResponse<Game>, Error>({
+    queryKey: ["games", gameQuery],
+    queryFn: ({ pageParam }) =>
+      apiClientInstance.getAll({
+        params: {
+          genres: gameQuery?.genre?.id,
+          parent_platforms: gameQuery?.platform?.id,
+          ordering: gameQuery?.sortOrder,
+          search: gameQuery?.searchText,
+          page:pageParam
+        },
+      }),
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.next ? allPages.length + 1 : undefined;
+    },
+  });
 };
 
 export default useGames;

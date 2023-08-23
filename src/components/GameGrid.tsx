@@ -10,8 +10,9 @@ interface Props {
 }
 
 const GameGrid = ({ gameQuery }: Props) => {
-  const { data, error, isLoading } = useGames(gameQuery);
-  const skeletons = [1, 2, 3, 4, 5, 6];
+  const pageSize = 12;
+  const { data, error, isLoading , fetchNextPage , isFetchingNextPage} = useGames(gameQuery, pageSize);
+  const skeletons = [1, 2, 3, 4, 5, 6 , 7 , 8];
 
   if (error) return <Text>{error.message}</Text>;
 
@@ -27,11 +28,19 @@ const GameGrid = ({ gameQuery }: Props) => {
             <GameCardSkeleton />
           </GameCardContainer>
         ))}
-      {data?.results.map((game) => (
-        <GameCardContainer key={game.id}>
-          <GameCard game={game} />
-        </GameCardContainer>
-      ))}
+      {
+        data?.pages.map((innerData) => (
+          innerData.results.map((game) => (
+            <GameCardContainer key={game.id}>
+              <GameCard game={game} />
+            </GameCardContainer>
+          ))
+        ))
+      }
+      <button className="btn btn-dark"
+      onClick={() => fetchNextPage()}
+      disabled={isFetchingNextPage}
+      >Load More</button>
     </SimpleGrid>
   );
 };

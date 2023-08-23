@@ -1,18 +1,8 @@
-import axios from "axios";
-import { GameQuery } from "../App";
-import { FetchResponse , Platform} from "../services/api-client";
-import { useQuery } from "react-query";
-import { Game } from "../hooks/useGames";
-
-export default axios.create({
-  baseURL: "https://api.rawg.io/api",
-  params: {
-    key: "3e9fa37ef569498da299de5a59e06105",
-  },
-});
+import axios, { AxiosRequestConfig } from "axios";
 
 export interface FetchResponse<T> {
   count: number;
+  next:string | null;
   results: T[];
 }
 
@@ -22,21 +12,28 @@ export interface Platform {
   slug: string;
 }
 
-export class APICLIENT{
-  endpoint : string;
-  querykey : string;
-  gameQuery : GameQuery | undefined;
-  constructor( endpoint : string , queryKey : string , gameQuery : GameQuery | undefined)
-  {
-    this.endpoint = endpoint;
-    this.querykey = queryKey;
-    this.gameQuery = gameQuery;
-  }
-  getAll()
-  {
-    return useQuery({
-      queryKey:[ this.querykey , this.gameQuery],
 
-    })      
+const axiosInstance = axios.create({
+  baseURL: "https://api.rawg.io/api",
+  params: {
+    key: "3e9fa37ef569498da299de5a59e06105",
+  },
+});
+
+export class apiClient<T>{
+  endPoint : string;
+  constructor(endPoint:string)
+  {
+    this.endPoint = endPoint;
   }
+
+  getAll( config : AxiosRequestConfig )
+  {
+    return axiosInstance.get<FetchResponse<T>>(this.endPoint , config )
+    .then((data) => data.data)
+  }
+
 }
+
+
+

@@ -1,18 +1,15 @@
 import platforms from "../data/platforms";
+import { Platform, apiClient } from "../services/api-client";
 import { useQuery } from "react-query";
-import apiClient from "../services/api-client";
-import { FetchResponse , Platform} from "../services/api-client";
 
-
+const apiClientInstance = new apiClient<Platform>("/platforms/lists/parents");
 
 const usePlatforms = () => {
-   return useQuery({
+  return useQuery({
     queryKey: ["platforms"],
-    queryFn: () => {
-      return apiClient.get<FetchResponse<Platform>>("/platforms/lists/parents").then((resp) => resp.data);
-    },
-    staleTime: 1 * 60 * 1000 ,// 1 min
-    initialData:{count:platforms.length , results:platforms}
+    queryFn: apiClientInstance.getAll,
+    staleTime: 24 * 60 * 60 * 1000, // 24h
+    initialData: { count: platforms.length, results: platforms },
   });
 };
 
