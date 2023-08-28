@@ -2,6 +2,7 @@ import { HStack, Text, Box } from '@chakra-ui/react'
 import ColorModeSwitch from './ColorModeSwitch';
 import SearchInput from './SearchInput';
 import { Link } from 'react-router-dom';
+import '../App.css'
 
 const NavBar = () => {
   return (
