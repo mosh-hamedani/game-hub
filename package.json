@@ -20,6 +20,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.10.0",
+    "vercel": "^32.1.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
