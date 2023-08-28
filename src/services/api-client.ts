@@ -32,7 +32,9 @@ export class apiClient<T>{
     return axiosInstance.get<FetchResponse<T>>(this.endPoint , config )
     .then((data) => data.data)
   }
-
+  getDetail = ()=>{
+    return axiosInstance.get<T>(this.endPoint).then((resp) => resp.data)
+  }
 }
 
 
