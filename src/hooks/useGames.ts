@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from "react-query";
-import { GameQuery } from "../App";
 import { FetchResponse, Platform } from "../services/api-client";
 import { apiClient } from "../services/api-client";
 import  ms  from "ms";
+import { useGameQueryStore } from "../Zustand/zustandStore";
 
 const apiClientInstance = new apiClient<Game>("/games");
 
@@ -15,7 +15,8 @@ export interface Game {
   rating_top: number;
 }
 
-const useGames = (gameQuery: GameQuery, pageSize: number) => {
+const useGames = (pageSize: number) => {
+  const gameQuery =  useGameQueryStore( s=> s.gameQuery )
   return useInfiniteQuery<FetchResponse<Game>, Error>({
     queryKey: ["games", gameQuery],
     staleTime: ms('24h'),
