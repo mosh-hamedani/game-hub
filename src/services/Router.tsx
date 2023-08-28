@@ -8,7 +8,7 @@ export const Router = createBrowserRouter([
     {
         path: '/',
         element: <Layout />,
-        errorElement:<PageNotFound/>,
+        // errorElement:<PageNotFound/>,
         children: [
             { index: true, element: <HomePage /> },
             { path: 'games/:slug', element: <GameDetailPage/>}
