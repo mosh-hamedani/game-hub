@@ -20,7 +20,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
-    "react-infinite-scroll-component": "6.1"
+    "react-infinite-scroll-component": "6.1",
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
     "@types/ms": "^0.7.31",
